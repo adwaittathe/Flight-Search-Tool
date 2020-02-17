@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    /> 
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/bootstrap-datepicker.css" />
+    <script
+      type="text/javascript"
+      src="/assets/js/bootstrap-datepicker.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <script src="https://kraaden.github.io/autocomplete/autocomplete.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://kraaden.github.io/autocomplete/autocomplete.css"
+    />
+    <script type="text/javascript" src="/assets/js/awesomplete.js"></script>
+    <link rel="stylesheet" href="/assets/css/awesomplete.css" />
+    <style>
+#pageloader
+{
+  background: rgba( 255, 255, 255, 0.8 );
+  display: none;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  z-index: 9999;
+}
+
+#loading
+{
+  left: 30%;
+  margin-left: -32px;
+  margin-top: -32px;
+  position: absolute;
+  top: 40%;
+}
+
+
+    
+    </style>
+  </head>
+  <body>
+    <nav class="navbar-xs navbar-dark bg-primary" >
+      <a class="navbar-brand" href="/">
+  &nbsp;
+        <small>Home</small>
+      </a>
+    </nav>
+    <br/>
+
+    
+    <div class="container">
+      
+      <div id="pageloader">
+        <div id="loading">
+          <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
+          &nbsp &nbsp Fetching best flights for you..
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-3">
+              <img src="/assets/images/flight1.jpg" height="110" width="165">
+            </div>
+            <div class="col-md-9">
+              
+              <h1 class="text-primary font-italic">Flight Search Tool</h1>
+              <h5 class="text-muted"><em>Find the best flight deal from nearest selected airports.</em></h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+      </div>
+      <form id="form" action="/search" method="POST">
+        <div class="dates form-row">
+          <div class="form-group col-md-6">
+            <label for="departure">Departure</label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="departure"
+              name="departure"
+              placeholder="YYYY-MM-DD"
+              autocomplete="off"
+              required
+              value="<%= search.departure %>"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="return">Return</label>
+            <input
+              type="text"
+              class="form-control"
+              id="return"
+              name="return"
+              placeholder="YYYY-MM-DD"
+              autocomplete="off"
+              required
+              value="<%= search.return %>"
+            />
+          </div>
+        </div>
+        <div class="dates form-row">
+          <div class="form-group col-md-6">
+            <label for="from"> From</label>
+            <br />
+            <input type="text" id="from" name="from" class="form-control" placeholder="From" value="<%= search.from %>" required/>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="to">To</label>
+          </br>
+            <input type="text" id="to" name = "to" class="form-control" placeholder="To" value="<%= search.to %>" required />
+          </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Search Flight</button>
+        </div> 
+      </form>
+      
+      <% if(error){ %>
+
+        <div id = "error" class="alert alert-danger" role="alert"> <%= error %> </div> 
+      <% } %>
+      
+    </div>
+    <div class="container">
+    <% if(originList.length == 0 && destList.length == 0 && flag) { %>
+
+      <div class="alert alert-warning" role="alert">
+        Oops! There are no flights available for selected values.
+      </div>
+
+    <% } %>
+
+    
+    <% for (var i=0 ; i < Math.max(originList.length,destList.length ) ; i++) { %>
+    <div class="row">
+      <%
+      if(i < originList.length){
+      %>
+      <div class="col-sm-6">    
+        <div class="card bg-light mb-3">   
+          <div class="card-body">      
+            <div class="row">
+              <div class="col-sm-2">
+                <img src="/assets/images/takeoff-the-plane.png" height = "50" width = "50" class="rounded" alt="Take- off">
+              </div>  
+              <div class="col-sm-2">
+                <small text-muted>ident</small>
+                <small><%= originList[i].ident %></small>     
+              </div>
+              <div class="col-sm-2">
+                <small text-muted>Type</small>
+                <small><%= originList[i].aircraftType %></small>     
+              </div>
+             
+              <div class="col-sm-2">
+                <small text-muted>Business</small>
+                <small><%= originList[i].businessSeats %></small> 
+              </div> 
+              <div class="col-sm-2">
+                <small text-mutedl>Economy</small>
+                <small><%= originList[i].coachSeats %></small> 
+              </div>
+              <div class="col-sm-2">
+                <img src="/assets/images/land.png" height = "50" width = "50" class="rounded" alt="Seats">
+              </div>         
+            </div>
+             <p></p>
+            <div class="row">
+              <div class="col-sm-6">
+                <small class="text-primary">Origin</small>
+                <div class="card-text font-weight-bold"> <%= originList[i].origin %></div>
+              </div>
+              <div class="col-sm-6">
+                <small class="text-primary">Destination</small>
+                <div class="card-text font-weight-bold"> <%= originList[i].destination %> </div>      
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-sm-6">
+                <small class="text-muted">Departure</small>
+                <div class="card-txt"> 
+                  <em>
+                  <%= originList[i].departure %>
+                  </em>
+                 </div>
+              </div>
+              <div class="col-sm-6">
+                <small class="text-muted">Arrival</small>
+                <div class="card-text"> 
+                  <em>
+                  <%= originList[i].arrival %> 
+                </em>
+                </div>     
+              </div>
+            </div>    
+          </div>
+        </div>
+      </div>
+      <% } 
+      else
+      { %>
+        <div class="col-sm-6"> 
+        </div>
+
+      <% } 
+      if(i < destList.length) {
+      %>
+      <div class="col-sm-6">    
+        <div class="card bg-light mb-3">   
+          <div class="card-body">      
+            <div class="row">
+              <div class="col-sm-2">
+                <img src="/assets/images/takeoff-the-plane.png" height = "50" width = "50" class="rounded" alt="Take- off">
+              </div>  
+              <div class="col-sm-2">
+                <small text-muted>ident</small>
+                <small><%= destList[i].ident %></small>     
+              </div>
+              <div class="col-sm-2">
+                <small text-muted>Type</small>
+                <small><%= destList[i].aircraftType %></small>     
+              </div>
+              <div class="col-sm-2">
+                <small text-muted>Business</small>
+                <small><%= destList[i].businessSeats %></small> 
+              </div> 
+              <div class="col-sm-2">
+                <small text-mutedl>Economy</small>
+                <small><%= destList[i].coachSeats %></small> 
+              </div>
+              <div class="col-sm-2">
+                <img src="/assets/images/land.png" height = "50" width = "50" class="rounded" alt="Seats">
+              </div>         
+            </div>
+             <p></p>
+            <div class="row">
+              <div class="col-sm-6">
+                <small class="text-primary">Origin</small>
+                <div class="card-text font-weight-bold"> <%= destList[i].origin %></div>
+              </div>
+              <div class="col-sm-6">
+                <small class="text-primary">Destination</small>
+                <div class="card-text font-weight-bold"> <%= destList[i].destination %> </div>      
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-sm-6">
+                <small class="text-muted">Departure</small>
+                <div class="card-txt"> 
+                  <em>
+                  <%= destList[i].departure %>
+                  </em>
+                 </div>
+              </div>
+              <div class="col-sm-6">
+                <small class="text-muted">Arrival</small>
+                <div class="card-text"> 
+                  <em>
+                  <%= destList[i].arrival %> 
+                </em>
+                </div>     
+              </div>
+            </div>    
+          </div>
+        </div>
+      
+      </div>
+
+      <% } %>
+    </div>
+
+    <% } %>
+    </div>
+
+    <script>
+      var from = document.getElementById("from");
+      from.style.width= "550px";
+      var to = document.getElementById("to");
+      to.style.width= "550px";
+      $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        url: "http://localhost:3000/airports",
+        success: function(data) {
+          new Awesomplete(from, {
+            list: data
+          });
+          new Awesomplete(to, {
+            list: data
+          });
+        },
+        error: function(error) {}
+      });
+    </script>
+    <script>
+      $(function() {
+        $(".dates #departure").datepicker({
+          format: "yyyy-mm-dd",
+          autoclose: true
+        });
+      });
+      $(function() {
+        $(".dates #return").datepicker({
+          format: "yyyy-mm-dd",
+          autoclose: true
+        });
+      });
+    </script>
+    <script>
+      $(document).ready(function(){
+  $("#form").on("submit", function(){
+    $("#pageloader").fadeIn();
+  });//submit
+});  
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+
+  
+</html>
