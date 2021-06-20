@@ -10,10 +10,11 @@ Flight search tool returns the flights for requested airports. The result includ
 
 Technologies - Express.js, EJS, Bootstrap, MySQL, REST Api
 
+- The User Interface is implemented using and EJS and BootStrap.
 - Datepicker is added for user to choose Departure Date and Return Date.
 - The Autocomplete Text is added for Departure Airport and Arrival Airport. The Airport information is fetched from MySQL database to put inside suggestions.
 - Input validations for Dates.
-- The grid on the left display Origin   Destination flight while the grid on right display Destination   Origin.
+- The grid on the left display Origin to Destination flight while the grid on right display Destination to Origin.
 - The REST API fetch all 15 flights from origin to destination.
 - I have used geolib npm library to calculate the nearest airport from origin and destination. The library calculates the nearest airports using LatLong information.
 - After getting the 10 nearest airports the REST APIs is used to obtain one result each for all the 10 airports.
