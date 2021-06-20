@@ -4,6 +4,7 @@ Flight search tool returns the flights for requested airports. The result includ
 
 ![](flight-search-tool.png)
 
+![](autocomplete.png)
 
 
 [Click here](https://www.youtube.com/watch?v=O2AGzuvsNx0) to watch the demonstration of the application.
